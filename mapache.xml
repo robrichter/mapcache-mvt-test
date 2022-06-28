@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapcache>
+    <metadata>
+        <title>MapCache Service</title>
+        <abstract>Example of mapsevice used MapCache, Mapserver and Memcached stack</abstract>
+    </metadata>
+    <cache name="disk" type="disk">
+        <base>/opt/mapcache/data/mvt</base>
+   <symlink_blank/>
+</cache>
+    <format name="MVT" type="RAW">
+	  <extension>pbf</extension>
+	  <mime_type>application/x-protobuf</mime_type>
+    </format>
+    <source name="reports5514_source" type="wms">
+  	<http>
+    		<url>https://jered.pokus.cz/mapserv?</url>
+  	</http>
+  	<getmap>
+    		<params>
+      			<LAYERS>reports</LAYERS>
+      			<FORMAT>mvt</FORMAT>
+			<MAP>/opt/mapserv/reports/mvt_mapcache.map</MAP>
+    		</params>
+  	</getmap>
+   </source>
+   <tileset name="reports5514">
+        <source>reports5514_source</source>
+        <grid>gridKrovak</grid>
+        <cache>disk</cache>
+	<auto_expire>1</auto_expire>
+        <format>MVT</format>
+        <metadata>
+            <title>mvt for reports</title>
+            <abstract>mvt for reports</abstract>
+        </metadata>
+   </tileset>
+    <grid name="gridKrovak">
+        <extent>-936278.43 -1186319.40 -418605.12 -969115.44</extent>
+        <origin>top-left</origin>
+        <srs>EPSG:5514</srs>
+        <units>m</units>
+        <size>256 256</size>
+        <resolutions>8193 4096.512 2048.256 1024.128 512.064 256.032 128.016 64.008 32.004 16.002 8.001 4.0005 2.00025 1.000125 0.5000625</resolutions>
+    </grid>
+    <service type="wms" enabled="true">
+            <full_wms>assemble</full_wms>
+        <format>MVT</format>
+    </service>
+    <service type="wmts" enabled="true"/>
+    <service type="tms" enabled="true"/>
+    <service type="kml" enabled="false"/>
+    <service type="gmaps" enabled="false"/>
+    <service type="ve" enabled="false"/>
+    <errors>report</errors>
+    <threaded_fetching>false</threaded_fetching>
+</mapcache>
+

@@ -1,0 +1,61 @@
+MAP
+  NAME 'vector_tile_test'
+  SIZE 500 500
+  MAXSIZE 4096
+  CONFIG "MS_ERRORFILE" "/tmp/mc_error.txt"
+  DEBUG 5
+  PROJECTION
+    "+init=epsg:5514"
+  END
+  OUTPUTFORMAT
+    NAME "mvt"
+    DRIVER MVT
+    MIMETYPE "application/x-protobuf"
+    EXTENSION "pbf"
+    #FORMATOPTION "EXTENT=512" # default is 4096
+    FORMATOPTION "EDGE_BUFFER=0"
+  END
+  WEB
+    METADATA
+      wms_enable_request "*"
+      WMS_TITLE 'Test mapfile for MVT development.'
+      WMS_ONLINERESOURCE 'https://jered.pokus.cz/mapserv?'
+      WMS_SRS 'epsg:5514'
+    END
+  END
+  SYMBOL
+    NAME "point"
+    TYPE ELLIPSE
+    POINTS
+      1 1
+    END
+    FILLED TRUE
+  END
+  LAYER
+   NAME "reports"
+   STATUS ON
+   TYPE POINT
+   CONNECTIONTYPE POSTGIS
+   CONNECTION "host=127.0.0.1 user=postgres dbname=reports"
+   DATA "geom5514 from (SELECT r.* FROM reports.issue r) as foo using unique issue_id using srid=5514"
+   UNITS METERS
+   CLASS
+    STYLE
+      SYMBOL "point"
+      COLOR 200 50 100
+      SIZE  100
+    END
+   END
+   PROJECTION #source
+     "init=epsg:5514"
+   END
+   METADATA
+      "wms_title" "reports"
+      "WMS_SRS" "epsg:5514"
+      "gml_uniqueid_alias" "issue_id"
+      "gml_incilude_items" "all"
+      "gml_geometries" "geom5514"
+    END
+ END
+END
+
